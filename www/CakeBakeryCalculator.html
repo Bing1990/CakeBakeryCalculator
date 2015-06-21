@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<!-- saved from url=(0110)https://blackboard.iit.edu/bbcswebdav/pid-266230-dt-content-rid-1199982_1/courses/XLST8201520/assignment1.html -->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<style></style>
+	<title>Assignment1</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+
+
+	<style type="text/css">
+
+	.starter-template {
+
+		padding:100px 15px;
+		text-align: center;
+	}
+
+	</style>
+
+	<script src="http://code.jquery.com/jquery-2.1.3.js"></script>
+
+	<script src="ajax.js"></script>
+</head>
+
+
+<body>	
+
+
+	<nav class ="navbar navbar-inverse navbar-fixed-top">
+		<div class = "container">
+			<div class = "navbar-header">
+				<button type = "button" class = "navbar-toggle collapsed" data-toggle ="collapse" data-target="#navbar" aria-expanded ="false" aria-controles="navbar">
+					<span class ="sr-only">Toggle navigation</span>
+					<span class ="icon-bar"></span>
+					<span class ="icon-bar"></span>
+					<span class ="icon-bar"></span>
+
+				</button>
+
+				<a class="navbar-brand" href="#">Cake Baby</a>
+			</div>
+
+			<div id ="navbar" class="collapse navbar-collapse">
+				<ul class ="nav navbar-nav">
+				    <li><a href="Home"> Home </a></li>
+					<li><a href = "about">About</a></li>
+					<li><a href ="contact">Contact</a></li>
+				</ul>
+				<
+			</div>
+		</div>
+	</nav>
+
+	<div class = "starter-template">
+		<h1>Cake Baby</h1>
+		<p > This is cakeBabyApplication to manage their daily baking schedule and the cost of each days baking. You can enter the Amountfor Chocolate cake and Cookie.</p>
+
+
+	
+	<input type="text" placeholder="number for Chocolate cake" id= "chocolateCakeQuality">
+	<input type="text" placeholder="number for Cookies" id ="CookiesQuality">
+
+
+	<button  type="submit" class="btn btn-primary" id ="refresh" value = "Get the week recipes" >Get the week recipes</button>
+	<button type="button" class="btn btn-info" value ="calculate" id = "Calculate">Calculate</button>
+
+	<div id="cakeHook"></div>
+	<div id="costHook"></div>
+	<div id="detailHook"></div>
+	
+</div>
+	<script>
+
+
+		(function(cakebabyApp) { 
+
+
+
+			cakebabyApp.products = function (ingredientName,cost,per,supplier)
+			{
+
+				this.ingredientName = ingredientName;
+
+				this.cost = cost;
+
+				this.per = per;
+
+				this.supplier = supplier;
+
+				this.printOutProducts = function (){
+
+
+                //render code for recipes
+
+                var printOut = document.getElementById("cakeHook");
+
+                var productsDiv = document.createElement("div");
+
+                productsDiv.innerHTML = "<h3>" + "Here is ingredient provided :" + "<strong>" + this.ingredientName + "</strong>" + "</h3>" + "<p>" + "cost :" + this.cost + "</p>" + "<p>" + "per :" + this.per + "</p>" + "<p>" + "supplier :" + this.supplier + "</p>";
+
+                printOut.appendChild (productsDiv);
+	    		//render code for recipes
+	    	} ;
+	    }
+
+
+	    cakebabyApp.recipes = function (recipeName,ingredients)
+	    {
+
+	    	this.recipeName = recipeName;
+
+	    	this.ingredients = ingredients;
+
+	    	//$.each (ingredients , function(i,val) {
+
+          //this.ingedients.push ( recipes[ ..name .. ] )  //this is a built in javascript function to add to an array
+
+//});
+
+this.printOut = function (){
+
+
+                //render code for recipes
+
+                var printOutDiv = document.getElementById("cakeHook");
+
+                var recipesDiv = document.createElement("div");
+
+                recipesDiv.innerHTML = "<h3>" +" This are Our Products : " + "<strong>" + this.recipeName.name + "</strong>" + "</h3>";
+
+
+                printOutDiv.appendChild (recipesDiv);
+	    		//render code for recipes
+	    	} ;
+	    }
+
+	})(window.cakebabyApp = window.cakebabyApp || {} );
+
+
+	    //Get the data from json file
+
+	    //initialize cake ingredients - cake ingredients array
+	    //initialize cookie ingredients -  create objects for you, u will store in ingredients array
+
+	    //initialize cake recipe - recipe1= new cakebabyApp.Recipe(name of recipe, cake ingredients array)
+	    //initialize cookie recipe - recipe2= new cakebabyApp.Recipe(name of recipe, cookie ingredients array)
+
+
+
+	    var callback = function (text) {
+
+	    	var data = JSON.parse(text) ;
+
+	    	
+	    		//First read the products, create objects for each and store them in a map with the key being the name
+
+	    		
+
+	    		for(var i = 0; i < data.length ; i ++)
+
+	    		{   
+	    			var recipeName1 = new cakebabyApp.recipes(data[i].recipes[0]);
+
+	    			var recipesName2 = new cakebabyApp.recipes(data[i].recipes[1]);
+
+	    			recipeName1.printOut();
+
+	    			recipesName2.printOut();
+
+                    //get the each Flour price
+                    var productsFlour = new cakebabyApp.products(data[i].products[0].name, data[i].products[0].cost, data[i].products[0].per, data[i].products[0].supplier );
+
+                    var productsFlourCost = productsFlour.cost;
+
+	    			//console.log(productsFlourCost);
+
+
+                    //get each Sugar price
+                    var productsSugar = new cakebabyApp.products(data[i].products[1].name, data[i].products[1].cost, data[i].products[1].per, data[i].products[1].supplier );
+
+                    var productsSugarCost = productsSugar.cost;
+
+	    			//console.log(productsSugarCost);
+
+
+                    //get each Eggs price
+                    var productsEggs = new cakebabyApp.products(data[i].products[2].name, data[i].products[2].cost, data[i].products[2].per, data[i].products[2].supplier );
+
+                    var productsEggsCost = productsEggs.cost;
+
+	    			//console.log(productsEggsCost);
+
+
+
+                    //get each BakinPower price
+                    var productsBakingPowder = new cakebabyApp.products(data[i].products[3].name, data[i].products[3].cost, data[i].products[3].per, data[i].products[3].supplier);
+
+                    var productsBakingPowderCost = productsBakingPowder.cost;
+
+	    			//console.log(productsBakingPowderCost);
+
+
+
+
+	    			var productsBakingSoda = new cakebabyApp.products(data[i].products[4].name, data[i].products[4].cost, data[i].products[4].per, data[i].products[4].supplier );
+
+	    			var productsBakingSodaCost = productsBakingSoda.cost;
+
+	    			//console.log(productsBakingSodaCost);
+
+
+
+
+
+	    			var productsChocolatePower = new cakebabyApp.products(data[i].products[5].name, data[i].products[5].cost, data[i].products[5].per, data[i].products[5].supplier );
+
+	    			var productsChocolatePowerCost = productsChocolatePower.cost;
+
+	    			//console.log(productsChocolatePowerCost);
+
+
+
+
+	    			var productsChocolateChips = new cakebabyApp.products(data[i].products[6].name, data[i].products[6].cost, data[i].products[6].per, data[i].products[6].supplier );
+
+	    			var productsChocolateChipsCost = productsChocolateChips.cost;
+
+	    			//console.log(productsChocolateChipsCost);
+
+
+
+
+	    			var productsButter = new cakebabyApp.products(data[i].products[7].name, data[i].products[7].cost, data[i].products[7].per, data[i].products[7].supplier );
+
+	    			var productsButterCost = productsButter.cost;
+
+	    			//console.log(productsButterCost);
+
+
+
+
+	    			productsFlour.printOutProducts();
+
+	    			productsSugar.printOutProducts();
+
+	    			productsEggs.printOutProducts();
+
+	    			productsBakingPowder.printOutProducts();
+
+	    			productsBakingSoda.printOutProducts();
+
+	    			productsChocolatePower.printOutProducts();
+
+	    			productsChocolateChips.printOutProducts();
+
+	    			productsButter.printOutProducts();
+
+	    		}
+
+
+
+	    		for(var i = 0; i < data.length ; i ++)
+
+	    		{   
+	    			var recipesChocolateCake = new cakebabyApp.recipes(data[i].recipes[0].name, data[i].recipes[0].ingredients);
+
+	    			var recipesCookie = new cakebabyApp.recipes(data[i].recipes[1].name, data[i].recipes[1].ingredients);
+
+
+	    			//recipesChocolateCake.printOut();
+
+	    			//recipesCookie.printOut();
+
+
+	    			//console.log(recipesChocolateCake.ingredients[0].Sugar);
+
+	    			//console.log(recipesCookie.ingredients[0].ChocolateChips);
+	    		}
+
+
+	    		document.getElementById("Calculate").onclick = function (){
+
+
+
+	    			var chocolateCakeNumber = document.getElementById('chocolateCakeQuality').value;
+
+	    			var CookiesNumber = document.getElementById('CookiesQuality').value;
+
+	    			var howmany1 = 0.0;
+
+	    			var howmany2 = 0.0;
+
+	    			if(chocolateCakeNumber.value!="" && CookiesNumber.value !="")
+	    			{
+
+	    				howmany1 = chocolateCakeNumber;
+
+	    				howmany2 = CookiesNumber;
+
+	    			}
+
+
+                    // Wholesale Baking Number
+
+
+                    var cakeTotalCost = 0.0;
+
+                    var cookieTotalCost = 0.0;
+
+                    //the Amount Flour for Cake
+
+                    var CakeFlourNumber = parseFloat(recipesChocolateCake.ingredients[0].Flour * howmany1);
+
+                    //the Amount Flour for Cookie
+
+                    var CookieFlourNumber = parseFloat(recipesCookie.ingredients[0].Flour * howmany2 );
+
+
+                    var FlourNumber = CakeFlourNumber + CookieFlourNumber;
+
+                    cakeTotalCost += (CakeFlourNumber * productsFlourCost);
+
+                    cookieTotalCost += (CookieFlourNumber * productsFlourCost);
+
+
+                    var FlourCost = FlourNumber * productsFlourCost;
+
+
+
+                   // Amount Sugar for the cake and Cookie divided
+
+                   var cakeSugarNumber = parseFloat(recipesChocolateCake.ingredients[0].Sugar * howmany1);
+
+                   var cookieSugarNumber= parseFloat(recipesCookie.ingredients[0]. Sugar * howmany2);
+
+                   var SugarNumber = cakeSugarNumber + cookieSugarNumber;
+
+	    			//console.log(SugarNumber);
+	    			cakeTotalCost += (cakeSugarNumber * productsSugarCost);
+
+	    			cookieTotalCost += (cookieSugarNumber*productsSugarCost);
+
+
+	    			var SugarCost = SugarNumber * productsSugarCost;
+
+
+
+
+                   // Amount cakeBakingPowder for the cake and Cookie divided
+
+
+                   var cakeBakingPowderNumber = parseFloat(recipesChocolateCake.ingredients[0].BakingPowder * howmany1);
+
+                   var cookieBakingPowderNumber = parseFloat(recipesCookie.ingredients[0].BakingPowder * howmany2);
+
+                   var BakingPowderNumber = cakeBakingPowderNumber + cookieBakingPowderNumber;
+
+                   cakeTotalCost += (cakeBakingPowderNumber*productsBakingPowderCost);
+
+                   cookieTotalCost += (cookieBakingPowderNumber*productsBakingPowderCost);
+
+	    			//console.log(BakingPowderNumber);
+	    			var BakingPowderCost = BakingPowderNumber * productsBakingPowderCost;
+
+
+
+
+	    			 // Amount cakeBakingSoda for the cake and Cookie divided
+
+	    			 var cakeBakingSodaNumber = parseFloat(recipesChocolateCake.ingredients[0].BakingSoda * howmany1);
+
+	    			 var BakingSodaNumber = cakeBakingSodaNumber;
+
+	    			 cakeTotalCost += (cakeBakingSodaNumber*productsBakingSodaCost);
+
+	    			 var BakingSodaCost = BakingSodaNumber * productsBakingSodaCost;
+
+
+
+
+	    			// Amount cakeChocolatePowder for the cake and Cookie divided
+
+	    			var cakeChocolatePowderNumber = parseFloat(recipesChocolateCake.ingredients[0].ChocolatePowder * howmany1);
+	    			//console.log(ChocolatePowderNumber);
+
+	    			var ChocolatePowderNumber = cakeChocolatePowderNumber;
+
+	    			cakeTotalCost += (ChocolatePowderNumber*productsChocolatePowerCost);
+
+	    			var ChocolatePowderCost = ChocolatePowderNumber * productsChocolatePowerCost;
+
+
+
+
+	    			// Amount cookieChocolateChips for the cake and Cookie divided
+
+	    			var cookieChocolateChipsNumber = parseFloat(recipesCookie.ingredients[0].ChocolateChips * howmany2);
+	    			//console.log(ChocolatePowderNumber);
+	    			cookieTotalCost += (cookieChocolateChipsNumber*productsChocolateChipsCost);
+
+	    			var ChocolateChipsNumber = cookieChocolateChipsNumber;
+
+	    			var ChocolateChipsCost = ChocolateChipsNumber * productsChocolateChipsCost;
+
+                    // the total Amount of WholesaleBaking ingredients .
+
+
+                    var WholesaleBakingNumber = FlourNumber + SugarNumber + BakingPowderNumber + BakingSodaNumber + ChocolatePowderNumber +ChocolateChipsNumber;
+
+                    // Pete's Farm Fresh Ingredients Number
+
+                     // Amount Eggs for the cake and Cookie divided
+                     var cakeEggsNumber = parseFloat(recipesChocolateCake.ingredients[0].Eggs * howmany1);
+
+                     var cookieEggsNumber = parseFloat(recipesCookie.ingredients[0].Eggs * howmany2 );
+
+                     var EggsNumber = cakeEggsNumber + cookieEggsNumber;
+
+                   // console.log(EggsNumber);
+                   cakeTotalCost += (cakeEggsNumber*productsEggsCost);
+
+                   cookieTotalCost += (cookieEggsNumber*productsEggsCost);
+
+                   var EggsCost = EggsNumber * productsEggsCost ;
+
+
+
+                   var cookieButterNumber = parseFloat(recipesCookie.ingredients[0].Butter * howmany2);
+
+                   var ButterNumber = cookieButterNumber;
+	    			// console.log(ButterNumber);
+	    			cookieTotalCost += (cookieButterNumber*productsButterCost);
+
+	    			var ButterCost  = ButterNumber * productsButterCost ; 
+
+                    //the total Amount of PeteFarm ingredients .
+
+                    var PeteFarmNumber = EggsNumber + ButterNumber ;
+
+	    			//console.log (PeteFarmNumber);
+
+
+	    			var PeteFarmCost = EggsCost + ButterCost ;
+
+	    			//console.log(PeteFarmCost) ;
+
+
+	    			console.log("----Cake and cookie cost-----");
+
+	    			console.log(cakeTotalCost) ;
+	    			
+	    			console.log(cookieTotalCost) ;
+
+
+	    			printOurDetail = function () {
+
+	    				var printdetails = document.getElementById("detailHook");
+
+	    				var existingDetails = document.getElementById("Div2"); 
+
+	    				if(existingDetails ==  null){
+
+	    					var detailElement = document.createElement("div");
+
+	    					detailElement.setAttribute("id", "Div2");
+
+	    					detailElement.innerHTML ="<h3>" + "------" + " For the WholesaleBakingNumber Deatil" + "-----" +"</h3>"
+
+	    					+ "<p>" + "FlourNumber :" + "<strong>" + FlourNumber + "</strong>"+ "</p>"
+
+	    					+ "<p>" + " SugarNumber : " + "<strong>" + SugarNumber + "</strong>" + "</p>"
+
+	    					+ "<p>" + " BakingPowderNumber : "  + "<strong>" +  BakingPowderNumber  + "</strong>" + "</p>"
+
+	    					+ "<p>" + "  BakingSodaNumber : "  + "<strong>" +  BakingSodaNumber + "</strong>" + "</p>"
+
+	    					+ "<p>" + " ChocolatePowderNumber : " + "<strong>" + ChocolatePowderNumber + "</strong>" + "</p>"
+
+	    					+ "<p>" + " ChocolateChipsNumber : " + "<strong>" +   ChocolateChipsNumber + "</strong>" + "</p>"
+
+	    					+"<h3>" + "----------------" + " For the PeteFarmNumber Deatil" + "------------------" +"</h3>"
+
+	    					+ "<p>" + " EggsNumber : " + "<strong>" +  EggsNumber + "</strong>" + "</p>"
+
+	    					+ "<p>" + " ButterNumber  : " + "<strong>" + ButterNumber + "</strong>"  + "</p>";
+
+	    					printdetails.appendChild(detailElement);
+	    				}else{
+	    					existingDetails.innerHTML ="<h3>" + "------" + " For the WholesaleBakingNumber Deatil" + "-----" +"</h3>"
+
+	    					+ "<p>" + "FlourNumber :" + "<strong>" + FlourNumber + "</strong>"+ "</p>"
+
+	    					+ "<p>" + " SugarNumber : " + "<strong>" + SugarNumber + "</strong>" + "</p>"
+
+	    					+ "<p>" + " BakingPowderNumber : "  + "<strong>" +  BakingPowderNumber  + "</strong>" + "</p>"
+
+	    					+ "<p>" + "  BakingSodaNumber : "  + "<strong>" +  BakingSodaNumber + "</strong>" + "</p>"
+
+	    					+ "<p>" + " ChocolatePowderNumber : " + "<strong>" + ChocolatePowderNumber + "</strong>" + "</p>"
+
+	    					+ "<p>" + " ChocolateChipsNumber : " + "<strong>" +   ChocolateChipsNumber + "</strong>" + "</p>"
+
+	    					+"<h3>" + "----------------" + " For the PeteFarmNumber Deatil" + "---------------" +"</h3>"
+
+	    					+ "<p>" + " EggsNumber : " + "<strong>" +  EggsNumber + "</strong>" + "</p>"
+
+	    					+ "<p>" + " ButterNumber  : " + "<strong>" + ButterNumber + "</strong>"  + "</p>";
+	    				}
+	    			};
+
+	    			printOurDetail();
+	    			
+	    			var total =  cookieTotalCost + cakeTotalCost;
+
+	    			console.log(total);
+
+	    			printOurTotal = function () {
+
+	    				var printOurTotals = document.getElementById("costHook");
+
+	    				var existingTotals = document.getElementById("Div1");   
+
+	    				if(existingTotals == null){
+
+	    					var totalElement = document.createElement("div");
+
+	    					totalElement.setAttribute("id", "Div1");
+
+	    					totalElement.innerHTML = "<h2>" + "------------TotalCost: $" + total.toFixed(2) + "-------------" + "</h2>"
+	    					+ "<h3>" +" Total Chocolate cake cost:  $" + cakeTotalCost.toFixed(2) + "</h3>"
+	    					+ "<h3>" + "Total Cookies cost: $" + cookieTotalCost.toFixed(2) + "</h3>" ;
+
+	    					printOurTotals.appendChild(totalElement);
+
+	    				}else{
+
+	    					existingTotals.innerHTML = "<h2>" +  "------------TotalCost: $" + total.toFixed(2) + "-------------" + "</h2>"
+	    					+ "<h3>" +"Total Chocolate cake cost:  $" + cakeTotalCost.toFixed(2) + "</h3>" 
+	    					+ "<h3>" + "Total Cookies cost: $" + cookieTotalCost.toFixed(2) + "</h3>";
+	    				}   	    				
+	    			};
+
+	    			printOurTotal();
+
+	    		}
+
+	    	}
+
+
+	    	document.getElementById("refresh").onclick = function (){
+
+	    		ajax.get("a1data.json",callback);
+
+	    	};
+
+
+
+	    </script>	
+
+	</body>
+
+	</html>
